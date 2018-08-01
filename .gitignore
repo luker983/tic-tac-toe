@@ -1,0 +1,4 @@
+*.dSYM
+test
+test.c
+t3
