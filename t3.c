@@ -5,35 +5,57 @@
 int main()
 {
     struct board_t board;
+    char buf[LEN];
+    char c;
     int player = P1; 
-    int state = PLAYING;    
+    int state;    
+    int score1 = 0;
+    int score2 = 0;
 
-    board = init_board();
+    while (1) {
+        player = P1;
+        state = PLAYING;
+        board = init_board();
+        
+        while (state == PLAYING) {
+            system("clear");
+            print_board(board);
 
-    while (state == PLAYING) {
+            board = player_move(board, player);
+            state = check_board(board);
+     
+            player = (player == P1) ? P2 : P1;
+        }
+        
         system("clear");
         print_board(board);
 
-        board = player_move(board, player);
-        state = check_board(board);
- 
-        player = (player == P1) ? P2 : P1;
+        switch (state) {
+        case WIN1:
+            printf("Player 1 Wins!!!\n");       
+            score1++;
+            break;
+        case WIN2:
+            printf("Player 2 Wins!!!\n");
+            score2++;
+            break;
+        case DRAW:
+            printf("Draw!!!\n");
+        }   
+
+    
+        printf("Would you like to play again? [y/n]\n");
+        fgets(buf, LEN, stdin);
+        sscanf(buf, "%c", &c);
+
+        if (c == 'n') {
+            break;
+        } 
     }
     
     system("clear");
-    print_board(board);
-
-    switch (state) {
-    case WIN1:
-        printf("Player 1 Wins!!!\n");       
-        break;
-    case WIN2:
-        printf("Player 2 Wins!!!\n");
-        break;
-    case DRAW:
-        printf("Draw!!!\n");
-    }   
-    
+    printf("\n-------- Final Score --------\n");
+    printf("\nPlayer 1: %d\tPlayer 2: %d\n\n", score1, score2);
     return 0;
 }
 
