@@ -1,3 +1,11 @@
+/**
+ * @file t3.c
+ * @brief tic tac toe game
+ *
+ * @author Luke Rindels
+ * @date August 1, 2018
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include "t3.h"
@@ -12,24 +20,28 @@ int main()
     int score1 = 0;
     int score2 = 0;
 
+    // new game loop
     while (1) {
         player = P1;
         state = PLAYING;
         board = init_board();
         
+        // current game loop
         while (state == PLAYING) {
+            // clear screen and print board
             system("clear");
-            print_board(board);
-
-            board = player_move(board, player);
+            print_board(board, score1, score2);
+            // player makes selection
+            board = player_move(board, player, score1, score2);
             state = check_board(board);
-     
+            // switch player
             player = (player == P1) ? P2 : P1;
         }
         
         system("clear");
-        print_board(board);
+        print_board(board, score1, score2);
 
+        // game over options
         switch (state) {
         case WIN1:
             printf("Player 1 Wins!!!\n");       
@@ -43,7 +55,7 @@ int main()
             printf("Draw!!!\n");
         }   
 
-    
+        // play again?
         printf("Would you like to play again? [y/n]\n");
         fgets(buf, LEN, stdin);
         sscanf(buf, "%c", &c);
@@ -53,12 +65,18 @@ int main()
         } 
     }
     
+    // final score printing
     system("clear");
     printf("\n-------- Final Score --------\n");
     printf("\nPlayer 1: %d\tPlayer 2: %d\n\n", score1, score2);
     return 0;
 }
 
+/**
+ * initializes the board with coordinates
+ *
+ * @return initialized board
+ */
 struct board_t init_board()
 {
     struct board_t board;
@@ -67,6 +85,7 @@ struct board_t init_board()
     int j;
     int coord = 1;
 
+    // fills each space with a number (ascending) starts at 1
     for (i = 0; i < SIZE; i++) {
         for (j = 0; j < SIZE; j++) {
             board.board[i][j] = coord + '0';
@@ -77,14 +96,24 @@ struct board_t init_board()
     return board;
 }
 
-void print_board(struct board_t board) 
+/**
+ * prints board and score
+ *
+ * @param board the current game board
+ * @param score1 player 1's score
+ * @param score2 player 2's score
+ */
+void print_board(struct board_t board, int score1, int score2) 
 {
     int i;
     int j;
     
     puts("");
     printf("\n------- Tic Tac Toe -------\n\n");
+    printf("---- Player 1 Score: %d\n", score1);
+    printf("---- Player 2 Score: %d\n\n", score2);
     printf("\t");
+    // loops through the board and prints out each coordinate/taken space
     for (i = 0; i < SIZE; i++) {
         for (j = 0; j < SIZE; j++) {
             printf(" %c ", board.board[i][j]);
@@ -100,35 +129,54 @@ void print_board(struct board_t board)
     puts("\n"); 
 }
 
-struct board_t player_move(struct board_t board, int player)
+/**
+ * player selects move here
+ *
+ * @param board the board in play
+ * @param player whose turn it is
+ * @param score1 player 1's score
+ * @param score2 player 2's score
+ * @return new board
+ */
+struct board_t player_move(struct board_t board, int player, int score1, int score2)
 {
     char buf[LEN];
     int coord = 0;
     int i;
     int j;
 
+    // loop for error checking
     while (coord == 0) {
+        // player selects coordinate
         printf("Player %d's Turn\n", player);
         printf("Pick a spot on the board:\n");
         fgets(buf, LEN, stdin);
         sscanf(buf, "%d", &coord);
       
+        // formulas to convert game coordinate to array indices
         i = (coord - 1) / SIZE;
         j = (coord + 2) % SIZE;
         // DEBUG: printf("coord = %d\tboard = %d\n", coord, board.board[(coord - 1) / SIZE][(coord + 2) % SIZE]); 
         if (board.board[i][j] - 48 != coord) {
             system("clear");
             printf("That is not a valid move, please try again"); 
-            print_board(board);
+            print_board(board, score1, score2);
             coord = 0;
         } 
     }
 
+    // places symbol on board depending on player turn
     board.board[i][j] = (player == P1) ? S1 : S2;
 
     return board;
 }
 
+/**
+ * checks for a winning move or full board
+ *
+ * @param board the board in play
+ * @return a game state
+ */
 int check_board(struct board_t board)
 {
     int i;
@@ -196,5 +244,6 @@ int check_board(struct board_t board)
         }
     }
 
+    // should never reach this point
     return PLAYING;
 }

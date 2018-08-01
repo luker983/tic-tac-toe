@@ -9,8 +9,8 @@
 #ifndef HANG_H
 #define HANG_H
 
-#define LEN 1024
-#define SIZE 3
+#define LEN 1024 // buffer length
+#define SIZE 3 // size of game board
 
 struct board_t {
     char board[SIZE][SIZE];
@@ -29,7 +29,7 @@ enum symbols {
 };
 
 struct board_t init_board();
-void print_board(struct board_t board);
-struct board_t player_move(struct board_t board, int player);
+void print_board(struct board_t board, int score1, int score2);
+struct board_t player_move(struct board_t board, int player, int score1, int score2);
 int check_board(struct board_t board);
 #endif
