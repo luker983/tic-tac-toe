@@ -110,13 +110,19 @@ void print_board(struct board_t board, int score1, int score2)
     
     puts("");
     printf("\n------- Tic Tac Toe -------\n\n");
-    printf("---- Player 1 Score: %d\n", score1);
-    printf("---- Player 2 Score: %d\n\n", score2);
+    printf(C1 "---- Player 1 Score: %d\n" RESET, score1);
+    printf(C2 "---- Player 2 Score: %d\n\n" RESET, score2);
     printf("\t");
     // loops through the board and prints out each coordinate/taken space
     for (i = 0; i < SIZE; i++) {
         for (j = 0; j < SIZE; j++) {
-            printf(" %c ", board.board[i][j]);
+            if (board.board[i][j] == S1) {
+                printf(C1 " %c " RESET, board.board[i][j]);
+            } else if (board.board[i][j] == S2) { 
+                printf(C2 " %c " RESET, board.board[i][j]);
+            } else {
+                printf(" %c ", board.board[i][j]); 
+            }
             if (j == SIZE - 1) {
                 if (i != SIZE - 1) {
                     printf("\n\t___|___|___\n\t");

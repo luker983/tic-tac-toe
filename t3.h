@@ -12,6 +12,13 @@
 #define LEN 1024 // buffer length
 #define SIZE 3 // size of game board
 
+#define C1  "\x1b[31m"
+#define C2  "\x1b[34m"
+#define RESET "\x1b[0m"
+
+#define S1 88
+#define S2 79
+
 struct board_t {
     char board[SIZE][SIZE];
 };
@@ -22,10 +29,6 @@ enum player {
 
 enum state {
     PLAYING, WIN1, WIN2, DRAW
-};
-
-enum symbols {
-    S1 = 88, S2 = 79
 };
 
 struct board_t init_board();
