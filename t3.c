@@ -68,7 +68,8 @@ int main()
     // final score printing
     system("clear");
     printf("\n-------- Final Score --------\n");
-    printf("\nPlayer 1: %d\tPlayer 2: %d\n\n", score1, score2);
+    printf(C1 "\nPlayer 1: %d" RESET, score1);
+    printf(C2 "\tPlayer 2: %d\n\n" RESET, score2);
     return 0;
 }
 
